@@ -36,8 +36,6 @@ public class User {
     }
 
 
-
-
     public String getUserID() {
         return userID;
     }
@@ -53,8 +51,6 @@ public class User {
     public Courier getCourier() {
         return courier;
     }
-
-
 
 
     void setOnline(Socket socket) {
@@ -79,8 +75,6 @@ public class User {
     }
 
 
-
-
     public boolean isOnline() {
         return isOnline;
     }
@@ -88,7 +82,6 @@ public class User {
     public boolean isOffline() {
         return !isOnline();
     }
-
 
 
     @Override

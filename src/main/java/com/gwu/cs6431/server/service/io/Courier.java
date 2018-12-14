@@ -23,8 +23,8 @@ public class Courier {
         return socket;
     }
 
-    public void send(Message msg) throws IOException, MessageNotCompletedException{
-        if (!msg.isCompleted()) {
+    public void send(Message msg) throws IOException, MessageNotCompletedException {
+        if (!msg.readyToSend()) {
             throw new MessageNotCompletedException(msg.getStartLine().toString() + " message is not completed.");
         }
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);

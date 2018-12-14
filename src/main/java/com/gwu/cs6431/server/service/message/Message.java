@@ -231,7 +231,7 @@ public class Message {
         return res;
     }
 
-    public boolean isCompleted() {
+    public boolean readyToSend() {
         switch (startLine) {
             case TXT:
             case CLOSE:
@@ -242,9 +242,7 @@ public class Message {
                 return this.sourceUser != null && this.targetUser != null;
             case REG:
             case SIGN:
-                return this.userID != null && this.passwd != null && this.status != null;
-            case QUIT:
-                return this.userID != null && this.passwd != null;
+                return this.userID != null && this.status != null;
             default:
                 return false;
         }
