@@ -1,13 +1,22 @@
-package com.gwu.cs6431.service.io;
+package com.gwu.cs6431.server.service.io;
 
-import com.gwu.cs6431.service.constant.ServerProps;
-import com.gwu.cs6431.service.threadPool.ThreadPool;
+import com.gwu.cs6431.server.service.constant.ServerProps;
+import com.gwu.cs6431.server.service.threadPool.ThreadPool;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 
 public class Listener implements Runnable{
+    private static Listener ourInstance = new Listener();
+
+    private Listener() {
+    }
+
+    public static Listener getInstance() {
+        return ourInstance;
+    }
+
     private ServerSocket ss = null;
     private boolean listening = true;
     private ExecutorService es = ThreadPool.THREAD_POOL;

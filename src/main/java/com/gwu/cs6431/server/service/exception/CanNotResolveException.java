@@ -1,4 +1,4 @@
-package com.gwu.cs6431.service.exception;
+package com.gwu.cs6431.server.service.exception;
 
 import java.io.IOException;
 

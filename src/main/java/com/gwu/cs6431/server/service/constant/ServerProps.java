@@ -1,4 +1,4 @@
-package com.gwu.cs6431.service.constant;
+package com.gwu.cs6431.server.service.constant;
 
 import java.util.ResourceBundle;
 
