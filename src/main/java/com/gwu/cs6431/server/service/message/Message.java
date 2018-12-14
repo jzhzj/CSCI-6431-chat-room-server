@@ -1,7 +1,9 @@
-package com.gwu.cs6431.service.message;
+package com.gwu.cs6431.server.service.message;
 
-import com.gwu.cs6431.service.constant.ServerProps;
-import com.gwu.cs6431.service.exception.CanNotResolveException;
+import com.gwu.cs6431.server.service.constant.ServerProps;
+import com.gwu.cs6431.server.service.exception.CanNotResolveException;
+import com.gwu.cs6431.server.service.session.Session;
+import com.gwu.cs6431.server.service.user.User;
 
 public class Message {
     private final static String EOM = ServerProps.EOM;
@@ -59,7 +61,7 @@ public class Message {
         Successful, Failed, Accepted, Refused
     }
 
-    private void setStartLine(String startLine) throws CanNotResolveException{
+    private void setStartLine(String startLine) throws CanNotResolveException {
         for (StartLine sl : StartLine.values()) {
             if (startLine.equalsIgnoreCase(sl.name())) {
                 this.startLine = sl;
@@ -75,7 +77,7 @@ public class Message {
         this.startLine = startLine;
     }
 
-    private void setStatus(String status) throws CanNotResolveException{
+    private void setStatus(String status) throws CanNotResolveException {
         for (Status st : Status.values()) {
             if (status.equalsIgnoreCase(st.name())) {
                 this.status = new HeaderField<>(Header.Status, st);
@@ -103,19 +105,31 @@ public class Message {
         this.sourceUser = new HeaderField<>(Header.SourceUser, sourceUser);
     }
 
+    public void setSourceUser(User sourceUser) {
+        setSourceUser(sourceUser.getUserID());
+    }
+
     public void setTargetUser(String targetUser) {
         this.targetUser = new HeaderField<>(Header.TargetUser, targetUser);
+    }
+
+    public void setTargetUser(User targetUser) {
+        setTargetUser(targetUser.getUserID());
     }
 
     public void setSessionID(String sessionID) {
         this.sessionID = new HeaderField<>(Header.SessionID, sessionID);
     }
 
+    public void setSessionID(Session session) {
+        setSessionID(session.getSessionId());
+    }
+
     public void setTxt(String txt) {
         this.txt = txt;
     }
 
-    private void setHeader(String line) throws CanNotResolveException{
+    private void setHeader(String line) throws CanNotResolveException {
         String[] elements = line.split("=");
         if (elements.length != 2) {
             throw new CanNotResolveException("Wrong Header!");
@@ -177,15 +191,16 @@ public class Message {
         return txt;
     }
 
-    public static Message genMessage(String message) {
-        if (message == null)
+    public static synchronized Message genMessage(String message) {
+        if (message == null) {
             return null;
+        }
         Message res = new Message();
         String[] lines = message.split("\\r\\n");
         // set Start line
         try {
             res.setStartLine(lines[0]);
-        }catch (CanNotResolveException e) {
+        } catch (CanNotResolveException e) {
             return null;
         }
 
@@ -207,12 +222,32 @@ public class Message {
         StringBuilder sb = new StringBuilder();
         for (; i < lines.length && !lines[i].equals(EOM); i++) {
             sb.append(lines[i]);
-            if (lines[i + 1].equals(EOM))
+            if (lines[i + 1].equals(EOM)) {
                 break;
+            }
             sb.append(NEW_LINE);
         }
         res.setTxt(sb.toString());
         return res;
+    }
+
+    public boolean isCompleted() {
+        switch (startLine) {
+            case TXT:
+            case CLOSE:
+                return this.sourceUser != null && this.targetUser != null && this.sessionID != null;
+            case RSP:
+                return this.sourceUser != null && this.targetUser != null && this.status != null;
+            case INVT:
+                return this.sourceUser != null && this.targetUser != null;
+            case REG:
+            case SIGN:
+                return this.userID != null && this.passwd != null && this.status != null;
+            case QUIT:
+                return this.userID != null && this.passwd != null;
+            default:
+                return false;
+        }
     }
 
     @Override
