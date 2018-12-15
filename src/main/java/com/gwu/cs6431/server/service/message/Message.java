@@ -325,6 +325,8 @@ public class Message {
             case REG:
             case SIGN:
                 return this.userID != null && this.status != null;
+            case QUIT:
+                return this.userID != null;
             default:
                 return false;
         }
