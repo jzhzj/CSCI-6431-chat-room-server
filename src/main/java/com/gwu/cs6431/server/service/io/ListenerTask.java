@@ -32,7 +32,9 @@ public class ListenerTask implements Runnable {
                     sb.append(NEW_LINE);
                     lineNum++;
                 }
+                System.out.println("EOM");
                 sb.append(EOM);
+                sb.append(NEW_LINE);
                 handle(sb.toString());
             }
         } catch (IOException e) {
