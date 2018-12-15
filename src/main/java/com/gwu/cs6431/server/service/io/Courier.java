@@ -29,5 +29,6 @@ public class Courier {
         }
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         out.print(msg.toString());
+        out.flush();
     }
 }

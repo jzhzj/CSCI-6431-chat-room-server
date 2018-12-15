@@ -27,7 +27,35 @@ public class Message {
     }
 
     private enum Header {
-        Status, UserID, Password, SourceUser, TargetUser, SessionID
+        /**
+         * Status
+         */
+        Status,
+
+        /**
+         * UserID
+         */
+        UserID,
+
+        /**
+         * Password
+         */
+        Password,
+
+        /**
+         * SourceUser
+         */
+        SourceUser,
+
+        /**
+         * TargetUser
+         */
+        TargetUser,
+
+        /**
+         * SessionID
+         */
+        SessionID
     }
 
     private class HeaderField<V> {
@@ -54,11 +82,62 @@ public class Message {
     }
 
     public enum StartLine {
-        REG, SIGN, INVT, RSP, TXT, CLOSE, QUIT
+        /**
+         * Registration
+         */
+        REG,
+
+        /**
+         * Sign in
+         */
+        SIGN,
+
+        /**
+         * Invitation
+         */
+        INVT,
+
+        /**
+         * Response
+         */
+        RSP,
+
+        /**
+         * Text
+         */
+        TXT,
+
+        /**
+         * Close
+         */
+        CLOSE,
+
+        /**
+         * Quit
+         */
+        QUIT
     }
 
     public enum Status {
-        Successful, Failed, Accepted, Refused
+        /**
+         * Successful
+         */
+        Successful,
+
+        /**
+         * Failed
+         */
+        Failed,
+
+        /**
+         * Accepted
+         */
+        Accepted,
+
+        /**
+         * Refused
+         */
+        Refused
     }
 
     private void setStartLine(String startLine) throws CanNotResolveException {
@@ -126,6 +205,9 @@ public class Message {
     }
 
     public void setTxt(String txt) {
+        if (txt == null || "".equals(txt)) {
+            return;
+        }
         this.txt = txt;
     }
 
@@ -207,7 +289,7 @@ public class Message {
         // set Header fields
         int i = 1;
         try {
-            for (; i < lines.length && !lines[i].equals(""); i++) {
+            for (; i < lines.length && !"".equals(lines[i]); i++) {
                 res.setHeader(lines[i]);
             }
 
@@ -281,11 +363,12 @@ public class Message {
             sb.append(NEW_LINE);
         }
         sb.append(NEW_LINE);
-        if (txt != null && !txt.equals("")) {
+        if (txt != null && !"".equals(txt)) {
             sb.append(txt);
             sb.append(NEW_LINE);
         }
         sb.append(EOM);
+        sb.append(NEW_LINE);
         return sb.toString();
     }
 }
