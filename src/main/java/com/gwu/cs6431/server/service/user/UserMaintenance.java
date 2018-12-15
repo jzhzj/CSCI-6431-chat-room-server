@@ -1,5 +1,9 @@
 package com.gwu.cs6431.server.service.user;
 
+import com.gwu.cs6431.server.service.exception.MessageNotCompletedException;
+import com.gwu.cs6431.server.service.message.Message;
+
+import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,20 +76,27 @@ public class UserMaintenance {
             return false;
         } else {
             // if the user has already registered
-            if (isOnline(userId)) {
-                // if the user has already login
+
+            // check the password
+            if (!checkPasswd(userId, passwd)) {
                 return false;
-            } else {
-                // if the user has not login yet
-                if (checkPasswd(userId, passwd)) {
-                    // if the user's passwd is correct
-                    putOnline(userId, socket);
-                    return true;
-                } else {
-                    // if not
-                    return false;
-                }
             }
+
+            if (isOnline(userId)) {
+                // Send a QUIT message to the user
+                Message quitMsg = new Message(Message.StartLine.QUIT);
+                quitMsg.setUserID(userId);
+                try {
+                    getUser(userId).getCourier().send(quitMsg);
+                } catch (IOException | MessageNotCompletedException e) {
+                    e.printStackTrace();
+                }
+                // if the user has already login, log them out
+                logout(userId);
+            }
+            // then, log the new connection in
+            putOnline(userId, socket);
+            return true;
         }
     }
 
