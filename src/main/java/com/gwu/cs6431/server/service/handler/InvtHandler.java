@@ -42,13 +42,19 @@ public class InvtHandler implements Handler {
 
         // If there is no such target user, respond to source user
         if (!UserMaintenance.getInstance().contains(targetUserId)) {
-            feedback("Sorry, there is no such user");
+            feedback("Sorry, there is no user \"" + targetUserId + "\"");
+            return;
         }
 
         // If the target user is found
         User targetUser = UserMaintenance.getInstance().getOnlineUser(targetUserId);
         // If the target user is online
         if (targetUser != null) {
+            if (targetUser.getSocket().isClosed()) {
+                UserMaintenance.getInstance().logout(targetUser);
+                feedback("Sorry, user " + msg.getTargetUser() + " is not online right now");
+                return;
+            }
             try {
                 // send target user this invitation
                 targetUser.getCourier().send(msg);
@@ -68,7 +74,7 @@ public class InvtHandler implements Handler {
         respond.setTxt(feedback);
         // send msg back
         try {
-            sourceUserCourier.send(msg);
+            sourceUserCourier.send(respond);
         } catch (IOException | MessageNotCompletedException e) {
             e.printStackTrace();
         }

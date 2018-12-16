@@ -5,6 +5,7 @@ import com.gwu.cs6431.server.service.threadPool.ThreadPool;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 
 public class Listener implements Runnable {
@@ -36,7 +37,9 @@ public class Listener implements Runnable {
 
         while (listening) {
             try {
-                ListenerTask job = new ListenerTask(ss.accept());
+                Socket accept = ss.accept();
+                ListenerTask job = new ListenerTask(accept);
+                System.out.println("Got new connection from:" + accept.getInetAddress() + "#" + accept.getPort());
                 es.execute(job);
             } catch (IOException e) {
                 e.printStackTrace();

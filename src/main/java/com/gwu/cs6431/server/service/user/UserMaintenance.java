@@ -8,6 +8,11 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Manages users.
+ *
+ * @author qijiuzhi
+ */
 public class UserMaintenance {
     private static UserMaintenance ourInstance = new UserMaintenance();
 
@@ -31,6 +36,7 @@ public class UserMaintenance {
             return false;
         }
         userMap.put(userId, new User(userId, passwd));
+        System.out.println("Registered a new user: " + userId);
         return true;
     }
 
@@ -105,12 +111,7 @@ public class UserMaintenance {
     }
 
     public void logout(String userId) {
-        for (User user : onlineUserSet) {
-            if (user.getUserID().equals(userId)) {
-                onlineUserSet.remove(user);
-                user.setOffline();
-            }
-        }
+        onlineUserSet.removeIf(user -> user.getUserID().equals(userId));
     }
 
 

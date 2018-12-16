@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * Used to send messages to clients.
+ *
+ * @author qijiuzhi
+ */
 public class Courier {
     private Socket socket;
 

@@ -5,6 +5,11 @@ import com.gwu.cs6431.server.service.io.Courier;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * Stands for users.
+ *
+ * @author qijiuzhi
+ */
 public class User {
     private String userID;
     private String passwd;

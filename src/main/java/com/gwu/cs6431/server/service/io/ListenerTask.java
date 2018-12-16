@@ -11,6 +11,11 @@ import java.net.Socket;
 
 import static com.gwu.cs6431.server.service.constant.ServerProps.*;
 
+/**
+ * This class is used to handle received messages from Listener.
+ *
+ * @author qijiuzhi
+ */
 public class ListenerTask implements Runnable {
     private Socket socket;
 
@@ -28,17 +33,20 @@ public class ListenerTask implements Runnable {
                 String line;
                 int lineNum = 0;
                 while (!(line = in.readLine()).equals(EOM) && lineNum < MAX_MSG_LEN) {
+                    System.out.println(line);
+
                     sb.append(line);
                     sb.append(NEW_LINE);
                     lineNum++;
                 }
                 System.out.println("EOM");
+                System.out.println();
+
                 sb.append(EOM);
                 sb.append(NEW_LINE);
                 handle(sb.toString());
             }
         } catch (IOException e) {
-            // TODO catch IOException
             e.printStackTrace();
         }
     }

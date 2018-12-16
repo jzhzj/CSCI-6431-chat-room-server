@@ -62,12 +62,12 @@ public class Message {
         private Header key;
         private V value;
 
-        public HeaderField(Header key, V value) {
+        HeaderField(Header key, V value) {
             this.key = key;
             this.value = value;
         }
 
-        public Header getKey() {
+        Header getKey() {
             return key;
         }
 

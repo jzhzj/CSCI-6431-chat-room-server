@@ -53,19 +53,6 @@ public class Session {
         removeSession(session.getSessionId());
     }
 
-    public static void removeAllSessionsOf(User user) {
-        removeSession(user.getUserID());
-    }
-
-    public static void removeAllSessionsOf(String userId) {
-        for (String id : sessionMap.keySet()) {
-            if (sessionMap.get(id).havingUser(userId)) {
-                // close this session
-                removeSession(id);
-            }
-        }
-    }
-
     public static Session getSession(String sessionId) {
         return sessionMap.get(sessionId);
     }
@@ -153,7 +140,7 @@ public class Session {
     public boolean equals(Object obj) {
         if (obj instanceof Session) {
             Session anotherSession = (Session) obj;
-            return havingUser(anotherSession.getUser1()) && havingUser(anotherSession.getUser2());
+            return anotherSession.getSessionId().equals(this.getSessionId());
         }
         return false;
     }
