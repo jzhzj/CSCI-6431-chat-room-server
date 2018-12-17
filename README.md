@@ -14,5 +14,7 @@ The functions of the system:
 - Chat  
 ## Details of my protocol
 [Chat Room Protocol](https://github.com/jzhzj/CSCI-6431-chat-room-server/blob/master/Chat_Room_Protocol.pdf)
+## User Guide
+[User_Guide.pdf](https://github.com/jzhzj/CSCI-6431-chat-room-server/blob/master/User_Guide.pdf)
 ## Contacts  
 - [Jiuzhi QI](mailto:qijiuzhi@gwu.edu)
